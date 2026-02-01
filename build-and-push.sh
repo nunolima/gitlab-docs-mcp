@@ -14,6 +14,7 @@ echo "Building GitLab Docs MCP Server"
 echo "GitLab Version: $GITLAB_VERSION"
 echo "Docker Hub: $DOCKER_HUB_USERNAME/$IMAGE_NAME"
 echo "Platforms: linux/amd64, linux/arm64"
+echo "Features: SBOM, Provenance"
 echo "========================================"
 echo ""
 
@@ -22,20 +23,24 @@ echo "🔧 Setting up Docker buildx for multi-platform builds..."
 docker buildx create --name mcp-builder --use 2>/dev/null || docker buildx use mcp-builder || docker buildx use default
 docker buildx inspect --bootstrap
 
-# Build the image for multiple platforms
+# Build the image for multiple platforms with SBOM and provenance
 if [ "$GITLAB_VERSION" = "latest" ]; then
-    echo "📦 Building latest version for linux/amd64 and linux/arm64..."
+    echo "📦 Building latest version for linux/amd64 and linux/arm64 with SBOM and provenance..."
     docker buildx build -f docker/Dockerfile \
         --platform linux/amd64,linux/arm64 \
+        --sbom=true \
+        --provenance=true \
         --push \
         -t $DOCKER_HUB_USERNAME/$IMAGE_NAME:latest .
 else
     # Extract major.minor version (e.g., 18.7 from 18.7.2)
     GITLAB_MINOR=$(echo $GITLAB_VERSION | cut -d. -f1,2)
     
-    echo "📦 Building version $GITLAB_VERSION (tags: $GITLAB_VERSION, $GITLAB_MINOR) for linux/amd64 and linux/arm64..."
+    echo "📦 Building version $GITLAB_VERSION (tags: $GITLAB_VERSION, $GITLAB_MINOR) for linux/amd64 and linux/arm64 with SBOM and provenance..."
     docker buildx build -f docker/Dockerfile \
         --platform linux/amd64,linux/arm64 \
+        --sbom=true \
+        --provenance=true \
         --build-arg GITLAB_VERSION=$GITLAB_VERSION \
         --push \
         -t $DOCKER_HUB_USERNAME/$IMAGE_NAME:$GITLAB_VERSION \
