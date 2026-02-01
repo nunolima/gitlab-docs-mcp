@@ -3,6 +3,9 @@ FROM python:3.12-slim
 # GitLab version to clone (e.g., 18.7.2, latest for main branch)
 ARG GITLAB_VERSION=latest
 
+# Add MCP registry label for package validation
+LABEL io.modelcontextprotocol.server.name="io.github.nunolima/gitlab-docs-mcp"
+
 # Install git
 RUN apt-get update && \
     apt-get install -y git && \

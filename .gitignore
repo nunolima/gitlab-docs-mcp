@@ -2,6 +2,9 @@
 data/
 repos/
 
+# MCP Publisher authentication tokens - DO NOT COMMIT
+.mcpregistry_*_token
+
 # Python
 __pycache__/
 *.py[cod]
