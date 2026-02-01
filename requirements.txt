@@ -1,0 +1,5 @@
+mcp
+python-frontmatter
+markdown-it-py
+sqlite-utils
+

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.nunolima/gitlab-docs-mcp",
+  "title": "GitLab Documentation MCP Server",
+  "description": "A Model Context Protocol server that provides searchable access to GitLab's official documentation. Indexes markdown documentation from multiple GitLab OSS repositories (GitLab CE/EE, Runner, Omnibus, Gitaly, Pages, Agent) and provides full-text search using SQLite FTS5.",
+  "repository": {
+    "url": "https://github.com/nunolima/gitlab-docs-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "docker",
+      "identifier": "nunolima/gitlab-docs-mcp",
+      "version": "18.7",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": []
+    }
+  ]
+}
