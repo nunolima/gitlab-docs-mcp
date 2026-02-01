@@ -71,3 +71,36 @@ echo ""
 echo "🔐 Logging out from Docker Hub..."
 docker logout
 echo "✅ Logged out successfully!"
+echo ""
+
+# Ask if user wants to publish to MCP registry
+read -p "📢 Publish to MCP registry? (y/N): " -n 1 -r
+echo ""
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Skipping MCP registry publication. Done!"
+    exit 0
+fi
+
+echo "📢 Publishing to MCP registry..."
+echo "Note: Make sure you've run 'mcp-publisher login github' first"
+echo ""
+
+# Publish to MCP registry
+if mcp-publisher publish; then
+    echo ""
+    echo "✅ Successfully published to MCP registry!"
+    echo ""
+    
+    # Verify publication
+    echo "🔍 Verifying publication..."
+    sleep 2  # Give the registry a moment to update
+    curl -s "https://registry.modelcontextprotocol.io/v0/servers?search=io.github.nunolima/gitlab-docs-mcp" | grep -q "gitlab-docs-mcp" && \
+        echo "✅ Verification successful! Server is live in the MCP registry." || \
+        echo "⚠️  Verification failed. Check manually at: https://registry.modelcontextprotocol.io/v0/servers?search=io.github.nunolima/gitlab-docs-mcp"
+else
+    echo ""
+    echo "❌ MCP registry publication failed. You may need to:"
+    echo "   1. Run 'mcp-publisher login github' to authenticate"
+    echo "   2. Bump the version in server.json if publishing a duplicate version"
+    echo "   3. Check that server.json is valid"
+fi

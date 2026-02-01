@@ -73,48 +73,126 @@ echo "\nListing available tools:"
  echo '{"jsonrpc":"2.0","id":2,"method":"tools/list"}') | \
   docker run -i --rm mcp/gitlab-docs-mcp:latest 2>/dev/null | tail -1 | jq .```
 
-## Usage
+## Installation
 
-### With Claude Desktop
+This server is published to the [MCP Community Registry](https://registry.modelcontextprotocol.io/v0/servers?search=io.github.nunolima/gitlab-docs-mcp).
 
-Add to your Claude Desktop MCP settings (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS):
+### Prerequisites
+
+- Docker installed and running
+- MCP-compatible client (Claude Desktop, Cline, Cursor, etc.)
+
+### Setup Instructions
+
+#### Claude Desktop
+
+1. **Locate your config file**:
+   - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+   - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+   - Linux: `~/.config/Claude/claude_desktop_config.json`
+
+2. **Add the server configuration**:
+   ```json
+   {
+     "mcpServers": {
+       "gitlab-docs": {
+         "command": "docker",
+         "args": ["run", "-i", "--rm", "nunolima/gitlab-docs-mcp:18.7"]
+       }
+     }
+   }
+   ```
+
+3. **Restart Claude Desktop** - The server will appear in the MCP tools menu (🔌 icon)
+
+#### Cline (VS Code Extension)
+
+1. Open Cline settings in VS Code
+2. Navigate to **MCP Servers** section
+3. Add this configuration:
+   ```json
+   {
+     "mcpServers": {
+       "gitlab-docs": {
+         "command": "docker",
+         "args": ["run", "-i", "--rm", "nunolima/gitlab-docs-mcp:18.7"]
+       }
+     }
+   }
+   ```
+4. Reload VS Code window
+
+#### Cursor
+
+1. Open Cursor settings
+2. Go to **Features** → **Model Context Protocol**
+3. Add the server configuration:
+   ```json
+   {
+     "mcpServers": {
+       "gitlab-docs": {
+         "command": "docker",
+         "args": ["run", "-i", "--rm", "nunolima/gitlab-docs-mcp:18.7"]
+       }
+     }
+   }
+   ```
+
+### Version Selection
+
+Choose the version that matches your GitLab deployment:
 
 ```json
-{
-  "mcpServers": {
-    "gitlab-docs": {
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "mcp/gitlab-docs-mcp:18.7.2"]
-    }
-  }
-}
+// For GitLab 18.7.x
+"args": ["run", "-i", "--rm", "nunolima/gitlab-docs-mcp:18.7"]
+
+// For latest GitLab version
+"args": ["run", "-i", "--rm", "nunolima/gitlab-docs-mcp:latest"]
 ```
 
-### With Cline/Cursor
+### Verification
 
-Add to your MCP server settings:
+After setup, verify the server is working:
 
-```json
-{
-  "mcpServers": {
-    "gitlab-docs": {
-      "type": "stdio",
-      "command": "docker",
-      "args": ["run", "-i", "--rm", "mcp/gitlab-docs-mcp:18.7"]
-    }
-  }
-}
-```
+1. **In Claude Desktop**: Look for the 🔌 icon - you should see "gitlab-docs" listed
+2. **Test a query**: Ask Claude to search GitLab documentation, e.g., "Search GitLab docs for CI/CD pipeline configuration"
+3. **Check Docker**: Run `docker ps -a` after making a query to see if the container ran
 
-### With MCP CLI
+### Troubleshooting
 
-```bash
-# Search documentation
-mcp search "How to configure GitLab Runner"
+**Server not appearing in client**:
+- Ensure Docker is running: `docker info`
+- Check config file JSON is valid (no trailing commas, proper quotes)
+- Restart your MCP client completely
 
-# Run directly
-docker run -i --rm mcp/gitlab-docs-mcp:18.7.2
-```
+**"Cannot connect to Docker daemon" error**:
+- Start Docker Desktop
+- Verify Docker is accessible: `docker ps`
+
+**Old documentation version**:
+- Use a different version tag (see Version Selection above)
+- Check available tags: https://hub.docker.com/r/nunolima/gitlab-docs-mcp/tags
+
+## Available Tools
+
+Once connected, the server provides these tools to your AI assistant:
+
+- **`search_docs`**: Full-text search across all GitLab documentation
+  - Example: "Search for GitLab Runner configuration options"
+  
+- **`get_doc`**: Retrieve specific documentation by file path
+  - Example: "Get the GitLab CI/CD variables documentation"
+  
+- **`list_repositories`**: List all indexed GitLab repositories
+  - Shows: GitLab CE/EE, Runner, Omnibus, Gitaly, Pages, Agent
+
+### Example Queries
+
+Try asking your AI assistant:
+- "Search GitLab docs for how to set up GitLab Runner with Docker"
+- "Find documentation about GitLab CI/CD pipeline syntax"
+- "What does the GitLab documentation say about backup and restore?"
+- "Search for GitLab Pages custom domain configuration"
 
 ## How It Works
 
