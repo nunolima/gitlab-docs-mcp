@@ -7,15 +7,14 @@
     "url": "https://github.com/nunolima/gitlab-docs-mcp",
     "source": "github"
   },
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packages": [
     {
       "registryType": "oci",
-      "identifier": "nunolima/gitlab-docs-mcp:18.7",
+      "identifier": "docker.io/nunolima/gitlab-docs-mcp:18.7",
       "transport": {
         "type": "stdio"
-      },
-      "environmentVariables": []
+      }
     }
   ]
 }
