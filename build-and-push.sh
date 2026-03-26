@@ -4,6 +4,12 @@ set -e
 # Build and push GitLab Documentation MCP Server Docker images
 # Usage: ./build-and-push.sh [GITLAB_VERSION]
 # Example: ./build-and-push.sh 18.7.2
+#
+# Prerequisites:
+# - docker logout
+# - docker login -u nunolima
+# - ./build-and-push.sh 18.7.2
+# - Publish to MCP registry? (y/N): N
 
 GITLAB_VERSION=${1:-"latest"}
 DOCKER_HUB_USERNAME="nunolima"
