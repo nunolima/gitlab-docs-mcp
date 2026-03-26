@@ -9,6 +9,8 @@ set -e
 # - docker logout
 # - docker login -u nunolima
 # - ./build-and-push.sh 18.7.2
+# - docker tag nunolima/gitlab-docs-mcp:18.8.7 nunolima/gitlab-docs-mcp:latest
+# - docker push --platform linux/amd64 --platform linux/arm64  nunolima/gitlab-docs-mcp:latest
 # - Publish to MCP registry? (y/N): N
 
 GITLAB_VERSION=${1:-"latest"}
